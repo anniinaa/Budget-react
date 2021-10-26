@@ -6,9 +6,9 @@ import EntryLines from './components/EntryLines'
 import MainHeader from './components/MainHeader'
 import ModalEdit from './components/ModalEdit'
 import NewEntryForm from './components/NewEntryForm'
+import { useSelector } from 'react-redux'
 
 function App() {
-  const [entries, setEntries] = useState(initialEntries)
   const [description, setDescription] = useState('')
   const [value, setValue] = useState('')
   const [isExpense, setIsExpense] = useState(true)
@@ -18,6 +18,8 @@ function App() {
   const [expenseTotal, setExpenseTotal] = useState(0)
   const [total, setTotal] = useState(0)
 
+  const entries = useSelector((state) => state.entries)
+
   useEffect(() => {
     if (!isOpen && entryId) {
       const index = entries.findIndex((entry) => entry.id === entry.id)
@@ -25,7 +27,7 @@ function App() {
       newEntries[index].description = description
       newEntries[index].value = value
       newEntries[index].isExpense = isExpense
-      setEntries(newEntries)
+      // setEntries(newEntries)
       setDescription('')
       setValue('')
       setIsExpense(true)
@@ -49,13 +51,8 @@ function App() {
     setTotal(totalIncomes - totalExpenses)
     setIncomeTotal(totalIncomes)
     setExpenseTotal(totalExpenses)
-    console.log('total', totalIncomes)
   }, [entries])
 
-  const deleteEntry = (id) => {
-    const result = entries.filter((entry) => entry.id !== id)
-    setEntries(result)
-  }
   const addEntry = () => {
     const result = entries.concat({
       id: entries.length + 1,
@@ -63,7 +60,7 @@ function App() {
       value,
       isExpense,
     })
-    setEntries(result)
+    // setEntries(result)
     resetEntry()
   }
   const editEntry = (id) => {
@@ -91,13 +88,8 @@ function App() {
       <DisplayBalance title="Your Balance" value={total} size="small" />
       <DisplayBalances incomesTotal={incomeTotal} expenseTotal={expenseTotal} />
       <MainHeader title="History" type="h3" />
+      <EntryLines isOpen={isOpen} entries={entries} editEntry={editEntry} />
       <MainHeader title="Add new transaction" type="h3" />
-      <EntryLines
-        isOpen={isOpen}
-        deleteEntry={deleteEntry}
-        entries={entries}
-        editEntry={editEntry}
-      />
       <NewEntryForm
         addEntry={addEntry}
         description={description}
@@ -123,30 +115,3 @@ function App() {
 }
 
 export default App
-
-var initialEntries = [
-  {
-    id: 1,
-    description: 'Work income',
-    value: 1000.0,
-    isExpense: false,
-  },
-  {
-    id: 2,
-    description: 'Water bill',
-    value: 80,
-    isExpense: true,
-  },
-  {
-    id: 3,
-    description: 'Rent',
-    value: 850,
-    isExpense: true,
-  },
-  {
-    id: 4,
-    description: 'Lottory win',
-    value: 800,
-    isExpense: false,
-  },
-]
