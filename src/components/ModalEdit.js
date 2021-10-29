@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { Button, Modal } from 'semantic-ui-react'
 import { closeEditModal } from '../actions/modals.actions'
